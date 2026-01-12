@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Main Menu</title>
+    <style>
+        /* 1. Reset and Variables */
+        :root {
+            --primary-color: #4f46e5; /* Professional Indigo */
+            --primary-hover: #4338ca;
+            --bg-color: #f8fafc;      /* Cool Grey Background */
+            --card-bg: #ffffff;
+            --text-main: #0f172a;     /* Very Dark Slate */
+            --text-sub: #64748b;      /* Muted Slate */
+            --border-color: #e2e8f0;
+            --shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.025);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* 2. Body Styling */
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+            line-height: 1.5;
+        }
+
+        /* 3. Main Card Container */
+        .container {
+            background-color: var(--card-bg);
+            width: 100%;
+            max-width: 420px;
+            padding: 40px;
+            border-radius: 24px;
+            box-shadow: var(--shadow);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+        }
+
+        /* 4. Header Section */
+        header {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+
+        .logo-placeholder {
+            width: 48px;
+            height: 48px;
+            background-color: #e0e7ff;
+            color: var(--primary-color);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 16px auto;
+        }
+
+        h1 {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--text-main);
+            letter-spacing: -0.025em;
+            margin-bottom: 8px;
+        }
+
+        p.subtitle {
+            font-size: 0.925rem;
+            color: var(--text-sub);
+            max-width: 280px;
+            margin: 0 auto;
+        }
+
+        /* 5. Button List Styling */
+        .link-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .menu-btn {
+            display: flex;
+            justify-content: space-between; /* Pushes text left and icon right */
+            align-items: center;
+            width: 100%;
+            padding: 16px 20px;
+            background-color: var(--card-bg);
+            color: var(--text-main);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1rem;
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+        }
+
+        /* Icon styling */
+        .menu-btn svg {
+            width: 20px;
+            height: 20px;
+            color: #cbd5e1;
+            transition: transform 0.2s ease, color 0.2s ease;
+        }
+
+        /* 6. Hover States */
+        .menu-btn:hover {
+            border-color: var(--primary-color);
+            background-color: #f5f7ff; /* Very subtle tint */
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(79, 70, 229, 0.1);
+            color: var(--primary-color);
+        }
+
+        .menu-btn:hover svg {
+            color: var(--primary-color);
+            transform: translateX(4px); /* Moves arrow slightly right */
+        }
+
+        .menu-btn:active {
+            transform: translateY(0);
+        }
+
+        /* 7. Disabled State Styling */
+        .menu-btn.disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            pointer-events: none; /* Prevents clicking */
+            background-color: #f8fafc;
+            border-color: #e2e8f0;
+            color: #94a3b8;
+            box-shadow: none;
+        }
+
+        .menu-btn.disabled svg {
+            color: #e2e8f0;
+        }
+
+        /* Badge for "Dalam Pengembangan" */
+        .badge {
+            font-size: 0.65rem; /* Slightly smaller to fit the longer text */
+            font-weight: 600;
+            background: #e2e8f0;
+            padding: 3px 8px;
+            border-radius: 6px;
+            margin-left: 8px;
+            color: #64748b;
+            text-transform: uppercase;
+            letter-spacing: 0.02em;
+        }
+
+        /* 8. Footer */
+        footer {
+            margin-top: 40px;
+            text-align: center;
+            font-size: 0.8rem;
+            font-weight: 500;
+            color: #94a3b8;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <header>
+            <!-- Logo Icon -->
+            <div class="logo-placeholder">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+                </svg>
+            </div>
+            
+            <h1>Main Menu</h1>
+            <p class="subtitle">Pilih salah satu menu berikut di bawah:</p>
+        </header>
+
+        <div class="link-list">
+            
+            <a href="https://taufik-ridwan.github.io/jadwal/" target="_blank" class="menu-btn">
+                Jadwal
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+            </a>
+            
+            <a href="https://taufik-ridwan.github.io/frozen-section/" target="_blank" class="menu-btn">
+                Frozen
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+            </a>
+            
+            <a href="https://taufik-ridwan.github.io/ajh/" target="_blank" class="menu-btn">
+                BAJAH
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+            </a>
+            
+            <a href="https://taufik-ridwan.github.io/rose/" target="_blank" class="menu-btn">
+                ROSE
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+            </a>
+            
+            <a href="https://taufik-ridwan.github.io/cpc-parse/" target="_blank" class="menu-btn">
+                CPC Parser
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+            </a>
+            
+            <!-- DISABLED ITEM -->
+            <div class="menu-btn disabled">
+                <span style="display: flex; align-items: center; flex-wrap: wrap; gap: 4px;">
+                    Urutan Presentan Lapag 
+                    <span class="badge">Dalam Pengembangan</span>
+                </span>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+            </div>
+
+        </div>
+
+        <footer>
+            &copy; 2026 Pikapi
+        </footer>
+    </div>
+
+</body>
+</html>
