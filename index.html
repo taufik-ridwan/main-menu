@@ -3,18 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Main Menu</title>
+    <title>Dashboard Pikapi</title>
     <style>
         /* 1. Reset and Variables */
         :root {
-            --primary-color: #4f46e5; /* Professional Indigo */
+            --primary-color: #4f46e5; /* Indigo */
             --primary-hover: #4338ca;
-            --bg-color: #f8fafc;      /* Cool Grey Background */
+            --bg-color: #f1f5f9;      /* Slate-100 */
             --card-bg: #ffffff;
-            --text-main: #0f172a;     /* Very Dark Slate */
-            --text-sub: #64748b;      /* Muted Slate */
+            --text-main: #0f172a;     /* Slate-900 */
+            --text-sub: #64748b;      /* Slate-500 */
             --border-color: #e2e8f0;
-            --shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.025);
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
         }
 
         * {
@@ -23,40 +23,52 @@
             padding: 0;
         }
 
-        /* 2. Body Styling */
+        /* 2. Body Layout */
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
             background-color: var(--bg-color);
             color: var(--text-main);
-            display: flex;
-            justify-content: center;
-            align-items: center;
             min-height: 100vh;
-            padding: 20px;
-            line-height: 1.5;
+            padding: 40px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
         }
 
-        /* 3. Main Card Container */
-        .container {
-            background-color: var(--card-bg);
+        /* 3. Main Grid Container - Expanded for 3 columns */
+        .main-layout {
+            display: grid;
+            /* Auto-fit columns, min width 320px */
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 24px;
             width: 100%;
-            max-width: 420px;
-            padding: 40px;
-            border-radius: 24px;
+            max-width: 1280px; /* Wider to fit 3 columns */
+            margin-bottom: 40px;
+        }
+
+        /* 4. Card Styling */
+        .card {
+            background-color: var(--card-bg);
+            padding: 32px;
+            border-radius: 20px;
             box-shadow: var(--shadow);
             border: 1px solid rgba(255, 255, 255, 0.5);
+            display: flex;
+            flex-direction: column;
+            height: 100%;
         }
 
-        /* 4. Header Section */
+        /* 5. Header Section inside Cards */
         header {
             text-align: center;
-            margin-bottom: 32px;
+            margin-bottom: 24px;
         }
 
-        .logo-placeholder {
+        .icon-header {
             width: 48px;
             height: 48px;
-            background-color: #e0e7ff;
+            background-color: #e0e7ff; /* Blue/Indigo */
             color: var(--primary-color);
             border-radius: 12px;
             display: flex;
@@ -64,32 +76,43 @@
             justify-content: center;
             margin: 0 auto 16px auto;
         }
+        
+        /* Secondary Color (Yellow/Amber) */
+        .icon-header.secondary {
+            background-color: #fef3c7;
+            color: #d97706;
+        }
 
-        h1 {
-            font-size: 1.5rem;
+        /* Tertiary Color (Green for Sheets) */
+        .icon-header.tertiary {
+            background-color: #dcfce7;
+            color: #16a34a;
+        }
+
+        h2 {
+            font-size: 1.25rem;
             font-weight: 800;
             color: var(--text-main);
-            letter-spacing: -0.025em;
             margin-bottom: 8px;
+            letter-spacing: -0.01em;
         }
 
         p.subtitle {
-            font-size: 0.925rem;
+            font-size: 0.875rem;
             color: var(--text-sub);
-            max-width: 280px;
-            margin: 0 auto;
         }
 
-        /* 5. Button List Styling */
+        /* 6. Button List Styling */
         .link-list {
             display: flex;
             flex-direction: column;
             gap: 12px;
+            flex-grow: 1;
         }
 
         .menu-btn {
             display: flex;
-            justify-content: space-between; /* Pushes text left and icon right */
+            justify-content: space-between;
             align-items: center;
             width: 100%;
             padding: 16px 20px;
@@ -97,134 +120,239 @@
             color: var(--text-main);
             text-decoration: none;
             font-weight: 600;
-            font-size: 1rem;
+            font-size: 0.95rem;
             border: 1px solid var(--border-color);
             border-radius: 12px;
             transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-            position: relative;
+            text-align: left;
+            line-height: 1.4;
         }
 
-        /* Icon styling */
-        .menu-btn svg {
+        .menu-btn .btn-icon {
             width: 20px;
             height: 20px;
             color: #cbd5e1;
             transition: transform 0.2s ease, color 0.2s ease;
+            flex-shrink: 0;
+            margin-left: 12px;
         }
 
-        /* 6. Hover States */
+        /* 7. Hover States */
         .menu-btn:hover {
             border-color: var(--primary-color);
-            background-color: #f5f7ff; /* Very subtle tint */
+            background-color: #f5f7ff;
             transform: translateY(-2px);
             box-shadow: 0 4px 12px rgba(79, 70, 229, 0.1);
             color: var(--primary-color);
+            z-index: 1;
         }
 
-        .menu-btn:hover svg {
+        .menu-btn:hover .btn-icon {
             color: var(--primary-color);
-            transform: translateX(4px); /* Moves arrow slightly right */
+            transform: translateX(4px);
         }
 
         .menu-btn:active {
             transform: translateY(0);
         }
 
-        /* 7. Disabled State Styling */
+        /* 8. Disabled State */
         .menu-btn.disabled {
             opacity: 0.6;
             cursor: not-allowed;
-            pointer-events: none; /* Prevents clicking */
+            pointer-events: none;
             background-color: #f8fafc;
             border-color: #e2e8f0;
             color: #94a3b8;
-            box-shadow: none;
         }
-
-        .menu-btn.disabled svg {
-            color: #e2e8f0;
-        }
-
-        /* Badge for "Dalam Pengembangan" */
+        
         .badge {
-            font-size: 0.65rem; /* Slightly smaller to fit the longer text */
+            font-size: 0.65rem;
             font-weight: 600;
             background: #e2e8f0;
             padding: 3px 8px;
             border-radius: 6px;
-            margin-left: 8px;
+            margin-left: 6px;
             color: #64748b;
             text-transform: uppercase;
-            letter-spacing: 0.02em;
+            display: inline-block;
+            white-space: nowrap;
         }
 
-        /* 8. Footer */
+        /* 9. Separator Styling */
+        .separator {
+            border: 0;
+            height: 1px;
+            background: #e2e8f0;
+            margin: 16px 0 8px 0;
+        }
+        
+        /* Remove top margin if separator is the first item */
+        .link-list > .separator:first-child {
+            margin-top: 0;
+        }
+        
+        .separator-label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: #94a3b8;
+            font-weight: 700;
+            margin: 8px 0 12px 0;
+            display: block;
+        }
+
+        /* 10. Footer */
         footer {
-            margin-top: 40px;
+            margin-top: auto;
             text-align: center;
             font-size: 0.8rem;
             font-weight: 500;
             color: #94a3b8;
+            width: 100%;
+        }
+
+        /* Mobile Adjustment */
+        @media (max-width: 900px) {
+            .main-layout {
+                max-width: 600px;
+            }
         }
     </style>
 </head>
 <body>
 
-    <div class="container">
-        <header>
-            <!-- Logo Icon -->
-            <div class="logo-placeholder">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
-                </svg>
-            </div>
-            
-            <h1>Main Menu</h1>
-            <p class="subtitle">Pilih salah satu menu berikut di bawah:</p>
-        </header>
+    <div class="main-layout">
+        
+        <!-- CARD 1: Main Menu (LEFT) -->
+        <div class="card">
+            <header>
+                <div class="icon-header">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+                </div>
+                <h2>Main Menu</h2>
+                <p class="subtitle">Pilih salah satu menu berikut:</p>
+            </header>
 
-        <div class="link-list">
-            
-            <a href="https://taufik-ridwan.github.io/jadwal/" target="_blank" class="menu-btn">
-                Jadwal
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
-            </a>
-            
-            <a href="https://taufik-ridwan.github.io/frozen-section/" target="_blank" class="menu-btn">
-                Frozen
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
-            </a>
-            
-            <a href="https://taufik-ridwan.github.io/ajh/" target="_blank" class="menu-btn">
-                BAJAH
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
-            </a>
-            
-            <a href="https://taufik-ridwan.github.io/rose/" target="_blank" class="menu-btn">
-                ROSE
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
-            </a>
-            
-            <a href="https://taufik-ridwan.github.io/cpc-parse/" target="_blank" class="menu-btn">
-                CPC Parser
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
-            </a>
-            
-            <!-- DISABLED ITEM -->
-            <div class="menu-btn disabled">
-                <span style="display: flex; align-items: center; flex-wrap: wrap; gap: 4px;">
-                    Urutan Presentan Lapag 
-                    <span class="badge">Dalam Pengembangan</span>
-                </span>
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+            <div class="link-list">
+                <a href="https://taufik-ridwan.github.io/jadwal/" target="_blank" class="menu-btn">
+                    Penjadwalan Tindakan
+                    <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                </a>
+                
+                <a href="https://taufik-ridwan.github.io/frozen-section/" target="_blank" class="menu-btn">
+                    Frozen
+                    <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                </a>
+                
+                <a href="https://taufik-ridwan.github.io/ajh/" target="_blank" class="menu-btn">
+                    BAJAH
+                    <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                </a>
+                
+                <a href="https://taufik-ridwan.github.io/rose/" target="_blank" class="menu-btn">
+                    ROSE
+                    <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                </a>
+                
+                <a href="https://taufik-ridwan.github.io/cpc-parse/" target="_blank" class="menu-btn">
+                    CPC Parser
+                    <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                </a>
+                
+                <!-- DISABLED ITEM -->
+                <div class="menu-btn disabled">
+                    <span>
+                        Urutan Presentan Lapag 
+                        <span class="badge">Dalam Pengembangan</span>
+                    </span>
+                    <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                </div>
             </div>
-
         </div>
 
-        <footer>
-            &copy; 2026 Pikapi
-        </footer>
+        <!-- CARD 2: Google Sheets (CENTER) -->
+        <div class="card">
+            <header>
+                <div class="icon-header tertiary">
+                    <!-- Spreadsheet Icon -->
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3h18v18H3zM3 9h18M9 21V9"/></svg>
+                </div>
+                <h2>Google Sheets (2026)</h2>
+                <!-- Subtitle Removed -->
+            </header>
+
+            <div class="link-list">
+                
+                <!-- NEW SEPARATOR -->
+                <div class="separator"></div>
+                <span class="separator-label">Tag Nomor Tindakan</span>
+                
+                <a href="https://docs.google.com/spreadsheets/d/1SdQBs0L380TAGfyC5cmziD3k6HwuuEwA4XCJMxGbRxU/edit?usp=sharing" target="_blank" class="menu-btn">
+                    Sheet Frozen
+                    <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+                </a>
+                
+                <a href="https://docs.google.com/spreadsheets/d/1BVzTVKwg-v8x6sybbesER9z0mXjNqJHF7hUtAmVlW5o/edit?usp=sharing" target="_blank" class="menu-btn">
+                    Sheet TRS
+                    <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+                </a>
+
+                <a href="https://docs.google.com/spreadsheets/d/1U4Qabvoa1koy316ieE2byWj7z1k2JxLCYDLtuAHf54M/edit?usp=sharing" target="_blank" class="menu-btn">
+                    Sheet ROSE
+                    <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+                </a>
+
+                <!-- Existing Separator -->
+                <div class="separator"></div>
+                <span class="separator-label">Laporan Pagi</span>
+
+                <a href="https://docs.google.com/spreadsheets/d/1nidTCnBHiEcj8S-MYzpv8aYmj0VxUSAsbWvsB3CIf00/edit" target="_blank" class="menu-btn">
+                    Sheet LAPAG
+                    <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+                </a>
+
+            </div>
+        </div>
+
+        <!-- CARD 3: Link Penting (RIGHT) -->
+        <div class="card">
+            <header>
+                <div class="icon-header secondary">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>
+                </div>
+                <h2>Link Penting</h2>
+                <p class="subtitle">Informasi & Jadwal Tambahan</p>
+            </header>
+
+            <div class="link-list">
+                
+                <a href="https://docs.google.com/spreadsheets/d/e/2PACX-1vTwswLzJcTVSmCklEaS7sUjmjHpUGCjHtpaUSNylfkPDgtlDLLz6OFLwqvGMlWZmeJBk22qvlK4vQdT/pubhtml" target="_blank" class="menu-btn">
+                    Jadwal Konsulen 2026
+                    <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+                </a>
+
+                <a href="https://raw.githubusercontent.com/taufik-ridwan/main-menu/refs/heads/main/assets/jam-dan-jadwal.jpg" target="_blank" class="menu-btn">
+                    Penentuan Konsulen, Kakak dan Lokasi (PJ Konsul)
+                    <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
+                </a>
+
+                <div class="separator"></div>
+                <span class="separator-label">Resident</span>
+
+                <a href="https://raw.githubusercontent.com/taufik-ridwan/main-menu/refs/heads/main/assets/jadwal%20R3-R5.jpg" target="_blank" class="menu-btn">
+                    Jadwal R3-R5
+                    <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                </a>
+
+            </div>
+        </div>
+
     </div>
+
+    <footer>
+        &copy; 2026 Pikapi
+    </footer>
 
 </body>
 </html>
