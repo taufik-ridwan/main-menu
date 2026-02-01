@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jadwal Jaga Residen - Februari 2026</title>
+    <style>
+        body {
+            font-family: Calibri, Arial, sans-serif;
+            margin: 20px;
+            background-color: #fff;
+        }
+
+        h1, h2 {
+            text-align: center;
+            margin: 2px 0;
+            text-transform: uppercase;
+            color: black;
+        }
+        
+        h1 { font-size: 24px; font-weight: 900; }
+        h2 { font-size: 20px; font-weight: 900; margin-bottom: 20px; }
+
+        /* Search Controls */
+        .controls {
+            text-align: center;
+            margin-bottom: 20px;
+            padding: 10px;
+            background: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        input[type="text"] {
+            padding: 8px;
+            font-size: 16px;
+            width: 200px;
+            text-transform: uppercase;
+            border: 1px solid #ccc;
+        }
+
+        button {
+            padding: 8px 15px;
+            cursor: pointer;
+            background-color: #444;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+        
+        button:hover { background-color: #000; }
+
+        /* Table Styling */
+        .table-container {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 1000px;
+            border: 2px solid #000;
+        }
+
+        th, td {
+            border: 1px solid #000;
+            text-align: center;
+            vertical-align: middle;
+            padding: 0;
+        }
+
+        td { border-right: 2px solid #000; }
+        td:last-child { border-right: 1px solid #000; }
+
+        th.day-header {
+            background-color: #fff;
+            padding: 4px;
+            font-weight: 900;
+            font-size: 14px;
+            border-bottom: 2px solid #000;
+            border-right: 2px solid #000;
+        }
+
+        .date-row td {
+            font-weight: 900;
+            background-color: #fff;
+            padding: 2px;
+            font-size: 14px;
+            border-bottom: 2px solid #000;
+            height: 20px;
+        }
+
+        .day-container {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            height: 100%;
+        }
+
+        .row-group {
+            display: flex;
+            width: 100%;
+            border-bottom: 1px solid #000;
+        }
+        .row-group:last-child {
+            border-bottom: none;
+        }
+
+        /* CELL STYLING */
+        .cell {
+            flex: 1;
+            padding: 4px 0;
+            font-weight: 900;
+            font-size: 14px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-right: 1px solid #000;
+            background-color: transparent;
+            min-height: 25px;
+            position: relative;
+        }
+
+        .cell:last-child {
+            border-right: none;
+        }
+        
+        .cell:hover {
+            background-color: rgba(0,0,0,0.05);
+            z-index: 20;
+        }
+
+        /* TOOLTIP CSS */
+        .cell[data-title]:hover::after {
+            content: attr(data-title);
+            position: absolute;
+            bottom: 110%;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #333;
+            color: #fff;
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-size: 12px;
+            white-space: nowrap;
+            z-index: 100;
+            pointer-events: none;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            font-weight: normal;
+        }
+
+        .cell[data-title]:hover::before {
+            content: '';
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            border-width: 5px;
+            border-style: solid;
+            border-color: #333 transparent transparent transparent;
+            z-index: 100;
+        }
+
+        /* COLORS MATCHING THE IMAGE */
+        .c-black { color: #000000; }     /* TUP */
+        .c-red { color: #C00000; }       /* AJH RSS */
+        .c-green { color: #00B050; }     /* AJH RP */
+        .c-purple { color: #7030A0; }    /* AJH USG */
+        .c-rose { color: #E066FF; }      /* ROSE MSCT (Light Orchid/Pink) */
+        .c-icc { color: #D02090; }       /* ICC (Deep Magenta) */
+        .c-gold { color: #FFC000; }      /* FROZEN */
+        .c-cyan { color: #00B0F0; }      /* BIOPSI GINJAL */
+        .c-darkblue { color: #002060; }  /* BRONKOSKOPI (Navy Blue) */
+        .c-orange { color: #ED7D31; }    /* BIOPSI LAINNYA */
+        
+        .bg-grey { background-color: #D9D9D9 !important; }
+        .bg-red { background-color: #FF0000 !important; }
+
+        .highlight {
+            background-color: #ffff00 !important;
+            outline: 2px solid #000;
+            z-index: 10;
+        }
+
+        .highlight span {
+            color: #000 !important;
+        }
+
+        .spacer-row { height: 15px; border: none; }
+        .spacer-row td { border: none; }
+
+        /* Legend Table */
+        .legend-table th {
+            font-size: 11px;
+            height: 120px;
+            vertical-align: bottom;
+            padding-bottom: 10px;
+            width: 50px;
+        }
+        .vertical-text {
+            writing-mode: vertical-rl;
+            transform: rotate(180deg);
+            white-space: nowrap;
+            margin: 0 auto;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>JADWAL JAGA RESIDEN</h1>
+    <h2>FEBRUARI 2026</h2>
+
+    <div class="controls">
+        <label><b>Cari Residen:</b> </label>
+        <input type="text" id="searchInput" placeholder="Contoh: RA, DI, AA..." onkeyup="searchResiden()">
+        <button onclick="clearSearch()">Reset</button>
+        <p style="font-size:12px; color:#555; margin-top:5px;">Hover mouse di atas kode untuk melihat lokasi.</p>
+    </div>
+
+    <div class="table-container">
+        <table id="scheduleTable">
+            <thead>
+                <tr>
+                    <th class="day-header">SENIN</th>
+                    <th class="day-header">SELASA</th>
+                    <th class="day-header">RABU</th>
+                    <th class="day-header">KAMIS</th>
+                    <th class="day-header">JUMAT</th>
+                    <th class="day-header">SABTU</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- WEEK 1 -->
+                <tr class="date-row">
+                    <td>2</td><td>3</td><td>4</td><td>5</td><td>6</td><td>7</td>
+                </tr>
+                <tr>
+                    <!-- MON 2 -->
+                    <td>
+                        <div class="day-container">
+                            <div class="row-group"><div class="cell c-black" onclick="highlight('DI')">DI</div><div class="cell c-red" onclick="highlight('RA')">RA</div><div class="cell c-green" onclick="highlight('AA')">AA</div></div>
+                            <div class="row-group"><div class="cell c-purple" onclick="highlight('DN')">DN</div><div class="cell c-rose" onclick="highlight('IM')">IM</div><div class="cell c-icc" onclick="highlight('AD')">AD</div></div>
+                            <div class="row-group">
+                                <div class="cell c-gold" onclick="highlight('FA')">FA</div>
+                                <div class="cell c-cyan" onclick="highlight('RG')">RG</div>
+                                <div class="cell" onclick="highlight('PS/GH')" data-title="BRONKOSKOPI / BIOPSI LAINNYA">
+                                    <span class="c-darkblue">PS</span>&nbsp;/&nbsp;<span class="c-orange">GH</span>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                    <!-- TUE 3 -->
+                    <td>
+                        <div class="day-container">
+                            <div class="row-group"><div class="cell c-black" onclick="highlight('LM')">LM</div><div class="cell c-red" onclick="highlight('AA')">AA</div><div class="cell c-green" onclick="highlight('AN')">AN</div></div>
+                            <div class="row-group"><div class="cell c-purple" onclick="highlight('IM')">IM</div><div class="cell c-rose" onclick="highlight('AD')">AD</div><div class="cell c-icc" onclick="highlight('DN')">DN</div></div>
+                            <div class="row-group">
+                                <div class="cell c-gold" onclick="highlight('BR')">BR</div>
+                                <div class="cell c-cyan" onclick="highlight('CY')">CY</div>
+                                <div class="cell" onclick="highlight('RE/PS')" data-title="BRONKOSKOPI / BIOPSI LAINNYA">
+                                    <span class="c-darkblue">RE</span>&nbsp;/&nbsp;<span class="c-orange">PS</span>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                    <!-- WED 4 -->
+                    <td>
+                        <div class="day-container">
+                            <div class="row-group"><div class="cell c-black" onclick="highlight('RA')">RA</div><div class="cell c-red" onclick="highlight('AN')">AN</div><div class="cell c-green" onclick="highlight('DI')">DI</div></div>
+                            <div class="row-group"><div class="cell c-purple" onclick="highlight('AD')">AD</div><div class="cell c-rose" onclick="highlight('DN')">DN</div><div class="cell c-icc" onclick="highlight('IM')">IM</div></div>
+                            <div class="row-group">
+                                <div class="cell c-gold" onclick="highlight('RS')">RS</div>
+                                <div class="cell c-cyan" onclick="highlight('FA')">FA</div>
+                                <div class="cell" onclick="highlight('GH/RG')" data-title="BRONKOSKOPI / BIOPSI LAINNYA">
+                                    <span class="c-darkblue">GH</span>&nbsp;/&nbsp;<span class="c-orange">RG</span>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                    <!-- THU 5 -->
+                    <td>
+                        <div class="day-container">
+                            <div class="row-group"><div class="cell c-black" onclick="highlight('AA')">AA</div><div class="cell c-red" onclick="highlight('DI')">DI</div><div class="cell c-green" onclick="highlight('LM')">LM</div></div>
+                            <div class="row-group"><div class="cell c-purple" onclick="highlight('DN')">DN</div><div class="cell c-rose" onclick="highlight('IM')">IM</div><div class="cell c-icc" onclick="highlight('AD')">AD</div></div>
+                            <div class="row-group">
+                                <div class="cell c-gold" onclick="highlight('IW')">IW</div>
+                                <div class="cell c-cyan" onclick="highlight('PS')">PS</div>
+                                <div class="cell" onclick="highlight('RG/RF')" data-title="BRONKOSKOPI / BIOPSI LAINNYA">
+                                    <span class="c-darkblue">RG</span>&nbsp;/&nbsp;<span class="c-orange">RF</span>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                    <!-- FRI 6 -->
+                    <td>
+                        <div class="day-container">
+                            <div class="row-group"><div class="cell c-black" onclick="highlight('AN')">AN</div><div class="cell c-red" onclick="highlight('LM')">LM</div><div class="cell c-green" onclick="highlight('RA')">RA</div></div>
+                            <div class="row-group"><div class="cell c-purple" onclick="highlight('IM')">IM</div><div class="cell c-rose" onclick="highlight('AD')">AD</div><div class="cell c-icc" onclick="highlight('DN')">DN</div></div>
+                            <div class="row-group">
+                                <div class="cell c-gold" onclick="highlight('PS')">PS</div>
+                                <div class="cell c-cyan" onclick="highlight('GH')">GH</div>
+                                <div class="cell" onclick="highlight('CY/RE')" data-title="BRONKOSKOPI / BIOPSI LAINNYA">
+                                    <span class="c-darkblue">CY</span>&nbsp;/&nbsp;<span class="c-orange">RE</span>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                    <!-- SAT 7 -->
+                    <td>
+                        <div class="day-container">
+                            <div class="row-group"><div class="cell c-gold" onclick="highlight('CY')">CY</div></div>
+                            <div class="row-group"><div class="cell c-red" onclick="highlight('LM')">LM</div></div>
+                            <div class="row-group"><div class="cell"></div></div>
+                        </div>
+                    </td>
+                </tr>
+
+                <tr class="spacer-row"><td colspan="6"></td></tr>
+
+                <!-- WEEK 2 -->
+                <tr class="date-row">
+                    <td>9</td><td>10</td><td>11</td><td>12</td><td>13</td><td>14</td>
+                </tr>
+                <tr>
+                    <!-- MON 9 -->
+                    <td>
+                        <div class="day-container">
+                            <div class="row-group"><div class="cell c-black" onclick="highlight('LM')">LM</div><div class="cell c-red" onclick="highlight('AA')">AA</div><div class="cell c-green" onclick="highlight('DI')">DI</div></div>
+                            <div class="row-group"><div class="cell c-purple" onclick="highlight('AD')">AD</div><div class="cell c-rose" onclick="highlight('DN')">DN</div><div class="cell c-icc" onclick="highlight('IM')">IM</div></div>
+                            <div class="row-group">
+                                <div class="cell c-gold" onclick="highlight('GH')">GH</div>
+                                <div class="cell c-cyan" onclick="highlight('RE')">RE</div>
+                                <div class="cell" onclick="highlight('FA/CY')" data-title="BRONKOSKOPI / BIOPSI LAINNYA">
+                                    <span class="c-darkblue">FA</span>&nbsp;/&nbsp;<span class="c-orange">CY</span>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                    <!-- TUE 10 -->
+                    <td>
+                        <div class="day-container">
+                            <div class="row-group"><div class="cell c-black" onclick="highlight('AA')">AA</div><div class="cell c-red" onclick="highlight('DI')">DI</div><div class="cell c-green" onclick="highlight('RA')">RA</div></div>
+                            <div class="row-group"><div class="cell c-purple" onclick="highlight('DN')">DN</div><div class="cell c-rose" onclick="highlight('IM')">IM</div><div class="cell c-icc" onclick="highlight('AD')">AD</div></div>
+                            <div class="row-group">
+                                <div class="cell c-gold" onclick="highlight('RG')">RG</div>
+                                <div class="cell c-cyan" onclick="highlight('RF')">RF</div>
+                                <div class="cell" onclick="highlight('GH/FA')" data-title="BRONKOSKOPI / BIOPSI LAINNYA">
+                                    <span class="c-darkblue">GH</span>&nbsp;/&nbsp;<span class="c-orange">FA</span>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                    <!-- WED 11 -->
+                    <td>
+                        <div class="day-container">
+                            <div class="row-group"><div class="cell c-black" onclick="highlight('DI')">DI</div><div class="cell c-red" onclick="highlight('RA')">RA</div><div class="cell c-green" onclick="highlight('AN')">AN</div></div>
+                            <div class="row-group"><div class="cell c-purple" onclick="highlight('IM')">IM</div><div class="cell c-rose" onclick="highlight('AD')">AD</div><div class="cell c-icc" onclick="highlight('DN')">DN</div></div>
+                            <div class="row-group">
+                                <div class="cell c-gold" onclick="highlight('LY')">LY</div>
+                                <div class="cell c-cyan" onclick="highlight('RG')">RG</div>
+                                <div class="cell" onclick="highlight('PS/GH')" data-title="BRONKOSKOPI / BIOPSI LAINNYA">
+                                    <span class="c-darkblue">PS</span>&nbsp;/&nbsp;<span class="c-orange">GH</span>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                    <!-- THU 12 -->
+                    <td>
+                        <div class="day-container">
+                            <div class="row-group"><div class="cell c-black" onclick="highlight('AN')">AN</div><div class="cell c-red" onclick="highlight('LM')">LM</div><div class="cell c-green" onclick="highlight('AA')">AA</div></div>
+                            <div class="row-group"><div class="cell c-purple" onclick="highlight('AD')">AD</div><div class="cell c-rose" onclick="highlight('DN')">DN</div><div class="cell c-icc" onclick="highlight('IM')">IM</div></div>
+                            <div class="row-group">
+                                <div class="cell c-gold" onclick="highlight('ES')">ES</div>
+                                <div class="cell c-cyan" onclick="highlight('CY')">CY</div>
+                                <div class="cell" onclick="highlight('RF/RE')" data-title="BRONKOSKOPI / BIOPSI LAINNYA">
+                                    <span class="c-darkblue">RF</span>&nbsp;/&nbsp;<span class="c-orange">RE</span>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                    <!-- FRI 13 -->
+                    <td>
+                        <div class="day-container">
+                            <div class="row-group"><div class="cell c-black" onclick="highlight('RA')">RA</div><div class="cell c-red" onclick="highlight('AN')">AN</div><div class="cell c-green" onclick="highlight('LM')">LM</div></div>
+                            <div class="row-group"><div class="cell c-purple" onclick="highlight('DN')">DN</div><div class="cell c-rose" onclick="highlight('IM')">IM</div><div class="cell c-icc" onclick="highlight('AD')">AD</div></div>
+                            <div class="row-group">
+                                <div class="cell c-gold" onclick="highlight('CY')">CY</div>
+                                <div class="cell c-cyan" onclick="highlight('FA')">FA</div>
+                                <div class="cell" onclick="highlight('RE/PS')" data-title="BRONKOSKOPI / BIOPSI LAINNYA">
+                                    <span class="c-darkblue">RE</span>&nbsp;/&nbsp;<span class="c-orange">PS</span>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                    <!-- SAT 14 -->
+                    <td>
+                        <div class="day-container">
+                            <div class="row-group"><div class="cell c-gold" onclick="highlight('RG')">RG</div></div>
+                            <div class="row-group"><div class="cell c-red" onclick="highlight('AN')">AN</div></div>
+                            <div class="row-group"><div class="cell"></div></div>
+                        </div>
+                    </td>
+                </tr>
+
+                <tr class="spacer-row"><td colspan="6"></td></tr>
+
+                <!-- WEEK 3 -->
+                <tr class="date-row">
+                    <td class="bg-grey">16</td>
+                    <td class="bg-red">17</td>
+                    <td>18</td>
+                    <td>19</td>
+                    <td>20</td>
+                    <td>21</td>
+                </tr>
+                <tr>
+                    <!-- MON 16 (GREY) -->
+                    <td class="bg-grey">
+                        <div class="day-container">
+                            <div class="row-group"><div class="cell c-black" onclick="highlight('AN')">AN</div><div class="cell c-red" onclick="highlight('LM')">LM</div><div class="cell c-green" onclick="highlight('AA')">AA</div></div>
+                            <div class="row-group"><div class="cell c-purple" onclick="highlight('IM')">IM</div><div class="cell c-rose" onclick="highlight('AD')">AD</div><div class="cell c-icc" onclick="highlight('DN')">DN</div></div>
+                            <div class="row-group">
+                                <div class="cell c-gold" onclick="highlight('RE')">RE</div>
+                                <div class="cell c-cyan" onclick="highlight('PS')">PS</div>
+                                <div class="cell" onclick="highlight('GH/RF')" data-title="BRONKOSKOPI / BIOPSI LAINNYA">
+                                    <span class="c-darkblue">GH</span>&nbsp;/&nbsp;<span class="c-orange">RF</span>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                    <!-- TUE 17 (RED HOLIDAY) -->
+                    <td class="bg-red"></td>
+                    <!-- WED 18 -->
+                    <td>
+                        <div class="day-container">
+                            <div class="row-group"><div class="cell c-black" onclick="highlight('LM')">LM</div><div class="cell c-red" onclick="highlight('AA')">AA</div><div class="cell c-green" onclick="highlight('DI')">DI</div></div>
+                            <div class="row-group"><div class="cell c-purple" onclick="highlight('IM')">IM</div><div class="cell c-rose" onclick="highlight('AD')">AD</div><div class="cell c-icc" onclick="highlight('DN')">DN</div></div>
+                            <div class="row-group">
+                                <div class="cell c-gold" onclick="highlight('RF')">RF</div>
+                                <div class="cell c-cyan" onclick="highlight('GH')">GH</div>
+                                <div class="cell" onclick="highlight('FA/RG')" data-title="BRONKOSKOPI / BIOPSI LAINNYA">
+                                    <span class="c-darkblue">FA</span>&nbsp;/&nbsp;<span class="c-orange">RG</span>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                    <!-- THU 19 -->
+                    <td>
+                        <div class="day-container">
+                            <div class="row-group"><div class="cell c-black" onclick="highlight('AA')">AA</div><div class="cell c-red" onclick="highlight('AN')">AN</div><div class="cell c-green" onclick="highlight('RA')">RA</div></div>
+                            <div class="row-group"><div class="cell c-purple" onclick="highlight('AD')">AD</div><div class="cell c-rose" onclick="highlight('DN')">DN</div><div class="cell c-icc" onclick="highlight('IM')">IM</div></div>
+                            <div class="row-group">
+                                <div class="cell c-gold" onclick="highlight('FA')">FA</div>
+                                <div class="cell c-cyan" onclick="highlight('RF')">RF</div>
+                                <div class="cell" onclick="highlight('CY/GH')" data-title="BRONKOSKOPI / BIOPSI LAINNYA">
+                                    <span class="c-darkblue">CY</span>&nbsp;/&nbsp;<span class="c-orange">GH</span>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                    <!-- FRI 20 -->
+                    <td>
+                        <div class="day-container">
+                            <div class="row-group"><div class="cell c-black" onclick="highlight('DI')">DI</div><div class="cell c-red" onclick="highlight('RA')">RA</div><div class="cell c-green" onclick="highlight('AN')">AN</div></div>
+                            <div class="row-group"><div class="cell c-purple" onclick="highlight('DN')">DN</div><div class="cell c-rose" onclick="highlight('IM')">IM</div><div class="cell c-icc" onclick="highlight('AD')">AD</div></div>
+                            <div class="row-group">
+                                <div class="cell c-gold" onclick="highlight('GH')">GH</div>
+                                <div class="cell c-cyan" onclick="highlight('RE')">RE</div>
+                                <div class="cell" onclick="highlight('PS/CY')" data-title="BRONKOSKOPI / BIOPSI LAINNYA">
+                                    <span class="c-darkblue">PS</span>&nbsp;/&nbsp;<span class="c-orange">CY</span>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                    <!-- SAT 21 -->
+                    <td>
+                        <div class="day-container">
+                            <div class="row-group"><div class="cell c-gold" onclick="highlight('FA')">FA</div></div>
+                            <div class="row-group"><div class="cell c-red" onclick="highlight('AA')">AA</div></div>
+                            <div class="row-group"><div class="cell"></div></div>
+                        </div>
+                    </td>
+                </tr>
+
+                <tr class="spacer-row"><td colspan="6"></td></tr>
+
+                <!-- WEEK 4 -->
+                <tr class="date-row">
+                    <td>23</td><td>24</td><td>25</td><td>26</td><td>27</td><td>28</td>
+                </tr>
+                <tr>
+                    <!-- MON 23 -->
+                    <td>
+                        <div class="day-container">
+                            <div class="row-group"><div class="cell c-black" onclick="highlight('AA')">AA</div><div class="cell c-red" onclick="highlight('DI')">DI</div><div class="cell c-green" onclick="highlight('LM')">LM</div></div>
+                            <div class="row-group"><div class="cell c-purple" onclick="highlight('IM')">IM</div><div class="cell c-rose" onclick="highlight('AD')">AD</div><div class="cell c-icc" onclick="highlight('DN')">DN</div></div>
+                            <div class="row-group">
+                                <div class="cell c-gold" onclick="highlight('PS')">PS</div>
+                                <div class="cell c-cyan" onclick="highlight('RF')">RF</div>
+                                <div class="cell" onclick="highlight('RG/FA')" data-title="BRONKOSKOPI / BIOPSI LAINNYA">
+                                    <span class="c-darkblue">RG</span>&nbsp;/&nbsp;<span class="c-orange">FA</span>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                    <!-- TUE 24 -->
+                    <td>
+                        <div class="day-container">
+                            <div class="row-group"><div class="cell c-black" onclick="highlight('LM')">LM</div><div class="cell c-red" onclick="highlight('AN')">AN</div><div class="cell c-green" onclick="highlight('RA')">RA</div></div>
+                            <div class="row-group"><div class="cell c-purple" onclick="highlight('AD')">AD</div><div class="cell c-rose" onclick="highlight('DN')">DN</div><div class="cell c-icc" onclick="highlight('IM')">IM</div></div>
+                            <div class="row-group">
+                                <div class="cell c-gold" onclick="highlight('CY')">CY</div>
+                                <div class="cell c-cyan" onclick="highlight('RG')">RG</div>
+                                <div class="cell" onclick="highlight('RF/RE')" data-title="BRONKOSKOPI / BIOPSI LAINNYA">
+                                    <span class="c-darkblue">RF</span>&nbsp;/&nbsp;<span class="c-orange">RE</span>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                    <!-- WED 25 -->
+                    <td>
+                        <div class="day-container">
+                            <div class="row-group"><div class="cell c-black" onclick="highlight('AN')">AN</div><div class="cell c-red" onclick="highlight('RA')">RA</div><div class="cell c-green" onclick="highlight('DI')">DI</div></div>
+                            <div class="row-group"><div class="cell c-purple" onclick="highlight('DN')">DN</div><div class="cell c-rose" onclick="highlight('IM')">IM</div><div class="cell c-icc" onclick="highlight('AD')">AD</div></div>
+                            <div class="row-group">
+                                <div class="cell c-gold" onclick="highlight('RG')">RG</div>
+                                <div class="cell c-cyan" onclick="highlight('PS')">PS</div>
+                                <div class="cell" onclick="highlight('RE/RF')" data-title="BRONKOSKOPI / BIOPSI LAINNYA">
+                                    <span class="c-darkblue">RE</span>&nbsp;/&nbsp;<span class="c-orange">RF</span>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                    <!-- THU 26 -->
+                    <td>
+                        <div class="day-container">
+                            <div class="row-group"><div class="cell c-black" onclick="highlight('RA')">RA</div><div class="cell c-red" onclick="highlight('DI')">DI</div><div class="cell c-green" onclick="highlight('AA')">AA</div></div>
+                            <div class="row-group"><div class="cell c-purple" onclick="highlight('IM')">IM</div><div class="cell c-rose" onclick="highlight('AD')">AD</div><div class="cell c-icc" onclick="highlight('DN')">DN</div></div>
+                            <div class="row-group">
+                                <div class="cell c-gold" onclick="highlight('RF')">RF</div>
+                                <div class="cell c-cyan" onclick="highlight('RE')">RE</div>
+                                <div class="cell" onclick="highlight('CY/RG')" data-title="BRONKOSKOPI / BIOPSI LAINNYA">
+                                    <span class="c-darkblue">CY</span>&nbsp;/&nbsp;<span class="c-orange">RG</span>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                    <!-- FRI 27 -->
+                    <td>
+                        <div class="day-container">
+                            <div class="row-group"><div class="cell c-black" onclick="highlight('DI')">DI</div><div class="cell c-red" onclick="highlight('AA')">AA</div><div class="cell c-green" onclick="highlight('LM')">LM</div></div>
+                            <div class="row-group"><div class="cell c-purple" onclick="highlight('AD')">AD</div><div class="cell c-rose" onclick="highlight('DN')">DN</div><div class="cell c-icc" onclick="highlight('IM')">IM</div></div>
+                            <div class="row-group">
+                                <div class="cell c-gold" onclick="highlight('RE')">RE</div>
+                                <div class="cell c-cyan" onclick="highlight('CY')">CY</div>
+                                <div class="cell" onclick="highlight('FA/PS')" data-title="BRONKOSKOPI / BIOPSI LAINNYA">
+                                    <span class="c-darkblue">FA</span>&nbsp;/&nbsp;<span class="c-orange">PS</span>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                    <!-- SAT 28 -->
+                    <td>
+                        <div class="day-container">
+                            <div class="row-group"><div class="cell c-gold" onclick="highlight('GH')">GH</div></div>
+                            <div class="row-group"><div class="cell c-red" onclick="highlight('RA')">RA</div></div>
+                            <div class="row-group"><div class="cell"></div></div>
+                        </div>
+                    </td>
+                </tr>
+
+            </tbody>
+        </table>
+    </div>
+
+    <br>
+
+    <!-- Legend Table -->
+    <div class="table-container">
+        <table class="legend-table">
+            <thead>
+                <tr>
+                    <th style="width:100px;"></th>
+                    <th><div class="vertical-text c-black">TUP</div></th>
+                    <th><div class="vertical-text c-red">AJH RSS</div></th>
+                    <th><div class="vertical-text c-green">AJH RP</div></th>
+                    <th><div class="vertical-text c-purple">AJH USG</div></th>
+                    <th><div class="vertical-text c-rose">ROSE MSCT</div></th>
+                    <th><div class="vertical-text c-icc">ICC</div></th>
+                    <th><div class="vertical-text c-gold">FROZEN</div></th>
+                    <th><div class="vertical-text c-cyan">BIOPSI GINJAL</div></th>
+                    <th><div class="vertical-text c-darkblue">BRONKOSKOPI</div></th>
+                    <th><div class="vertical-text c-orange">BIOPSI LAINNYA</div></th>
+                    <th><div class="vertical-text c-black">JAGA SABTU</div></th>
+                    <th><div class="vertical-text c-black">TOTAL</div></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr style="height:30px;"><td colspan="13"></td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        // Init: Add hover tooltips based on color class
+        document.addEventListener("DOMContentLoaded", function() {
+            const mapping = {
+                'c-black': 'TUP',
+                'c-red': 'AJH RSS',
+                'c-green': 'AJH RP',
+                'c-purple': 'AJH USG',
+                'c-rose': 'ROSE MSCT',
+                'c-icc': 'ICC',
+                'c-gold': 'FROZEN',
+                'c-cyan': 'BIOPSI GINJAL',
+                'c-darkblue': 'BRONKOSKOPI',
+                'c-orange': 'BIOPSI LAINNYA'
+            };
+
+            const cells = document.querySelectorAll('.cell');
+            cells.forEach(cell => {
+                // Skip if already has data-title (like the split cells)
+                if(cell.hasAttribute('data-title')) return;
+
+                for (const [cls, title] of Object.entries(mapping)) {
+                    if (cell.classList.contains(cls)) {
+                        cell.setAttribute('data-title', title);
+                        break; 
+                    }
+                }
+            });
+        });
+
+        function highlight(code) {
+            clearSearch();
+            document.getElementById('searchInput').value = code;
+            performHighlight(code);
+        }
+
+        function searchResiden() {
+            let input = document.getElementById('searchInput').value.toUpperCase().trim();
+            performHighlight(input);
+        }
+
+        function performHighlight(query) {
+            let cells = document.querySelectorAll('.cell');
+            cells.forEach(cell => {
+                cell.classList.remove('highlight');
+            });
+
+            if (query === "") return;
+
+            cells.forEach(cell => {
+                let text = cell.innerText.toUpperCase();
+                let parts = text.split('/').map(s => s.trim());
+                if (text === query || parts.includes(query)) {
+                    cell.classList.add('highlight');
+                }
+            });
+        }
+
+        function clearSearch() {
+            document.getElementById('searchInput').value = "";
+            let cells = document.querySelectorAll('.cell');
+            cells.forEach(cell => {
+                cell.classList.remove('highlight');
+            });
+        }
+    </script>
+
+</body>
+</html>
